@@ -1,34 +1,24 @@
 package tk.lorddarthart.rxnewstestapp;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.ArrayList;
-import java.util.Objects;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link MainMainFragment.OnFragmentInteractionListener} interface
+ * {@link ErrorFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link MainMainFragment#newInstance} factory method to
+ * Use the {@link ErrorFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainMainFragment extends Fragment {
+public class ErrorFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -39,13 +29,8 @@ public class MainMainFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-    private RecyclerView recyclerView;
-    private RecyclerViewAdapter rvAdapter;
-    private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<Item> items;
-    private OnItemTouchListener itemTouchListener;
 
-    public MainMainFragment() {
+    public ErrorFragment() {
         // Required empty public constructor
     }
 
@@ -55,11 +40,11 @@ public class MainMainFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment MainMainFragment.
+     * @return A new instance of fragment ErrorFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MainMainFragment newInstance(String param1, String param2) {
-        MainMainFragment fragment = new MainMainFragment();
+    public static ErrorFragment newInstance(String param1, String param2) {
+        ErrorFragment fragment = new ErrorFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -76,50 +61,11 @@ public class MainMainFragment extends Fragment {
         }
     }
 
-    @NonNull
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main_main, container, false);
-
-        recyclerView = view.findViewById(R.id.rvMainMain);
-        layoutManager = new LinearLayoutManager(Objects.requireNonNull(getActivity()).getApplicationContext());
-        recyclerView.setLayoutManager(layoutManager);
-
-        HttpServiceHelper.getInstance()
-                .getJSONApi()
-                .getPostWithID("1wozWr5swgtdV9PLyo2b09mtjaOD6sS2I")
-                .enqueue(new Callback<News>() {
-                    @Override
-                    public void onResponse(@NonNull Call<News> call, @NonNull Response<News> response) {
-                        final News news = response.body();
-                        if (news!=null&&news.getNews().size()>0) {
-                            itemTouchListener = new OnItemTouchListener() {
-                                @Override
-                                public void onCardViewTap(View view, int position) {
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString("date", news.getNews().get(position).getDate());
-                                    bundle.putString("title", news.getNews().get(position).getDate());
-                                    bundle.putString("desc", news.getNews().get(position).getDate());
-                                    bundle.putString("pic", news.getNews().get(position).getDate());
-                                }
-
-                                @Override
-                                public void onButtonCvMenuClick(View view, int position) {
-
-                                }
-                            };
-                            rvAdapter = new RecyclerViewAdapter(Objects.requireNonNull(getActivity()).getApplicationContext(), news.getNews(), itemTouchListener);
-                            recyclerView.setAdapter(rvAdapter);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<News> call, @NonNull Throwable t) {
-                        t.printStackTrace();
-                    }
-                });
-        return view;
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_error, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

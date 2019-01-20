@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 class HttpServiceHelper {
     private static HttpServiceHelper mInstance;
-    private static final String BASE_URL = "https://drive.google.com/uc?id=1wozWr5swgtdV9PLyo2b09mtjaOD6sS2I";
+    private static final String BASE_URL = "https://drive.google.com/";
     private Retrofit mRetrofit;
 
     private HttpServiceHelper() {

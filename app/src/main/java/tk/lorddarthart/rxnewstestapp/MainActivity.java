@@ -1,19 +1,24 @@
 package tk.lorddarthart.rxnewstestapp;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import org.json.JSONArray;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainMainFragment.OnFragmentInteractionListener, MainVipFragment.OnFragmentInteractionListener {
 
-    private TextView mTextMessage;
     private String responseText;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -23,16 +28,16 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_main:
-                    mTextMessage.setText(R.string.title_main);
+                    initializeFragment(MainFragment.newInstance());
                     return true;
                 case R.id.navigation_search:
-                    mTextMessage.setText(R.string.title_search);
+                    initializeFragment(new SearchFragment());
                     return true;
                 case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
+                    initializeFragment(new NotificationsFragment());
                     return true;
                 case R.id.navigation_account:
-                    mTextMessage.setText(R.string.title_account);
+                    initializeFragment(new AccountFragment());
                     return true;
             }
             return false;
@@ -44,37 +49,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTextMessage =  findViewById(R.id.message);
         BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation.setSelectedItemId(R.id.navigation_main);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         // Получаем ответ - строку от сервера
-
-        HttpServiceHelper.getInstance()
-                .getJSONApi()
-                .getPostWithID(1)
-                .enqueue(new Callback<News>() {
-                    @Override
-                    public void onResponse(@NonNull Call<News> call, @NonNull Response<News> response) {
-                        News news = response.body();
-
-                        String title = news.getTitle() + "\n";
-                        String desc = news.getDesc() + "\n";
-                        String date = news.getDate() + "\n";
-                        String picUri = news.getPic() + "\n";
-
-                        responseText = title + desc + date + picUri;
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<News> call, @NonNull Throwable t) {
-
-                        responseText = "Error occurred while getting request!";
-                        t.printStackTrace();
-                    }
-                });
-
-        System.out.println( responseText );
     }
 
+    void initializeFragment(Fragment fr) {
+        // Инициализация кастомного фрагмента
+        FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
+        fragmentManager.replace(R.id.mainFragment, fr);
+        fragmentManager.commit();
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
 }
