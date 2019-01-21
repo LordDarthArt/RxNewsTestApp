@@ -6,15 +6,16 @@
     <string name="title_account">Аккаунт</string>
     <string name="tab_label1">Главная</string>
     <string name="tab_label2">VIP</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="search_fragment">Поиск не поддерживается</string>
     <string name="notifications_fragment">Уведомления не поддерживаются</string>
     <string name="account_fragment">Управление аккаунтом не поддерживается</string>
     <string name="news_fragment_vip">VIP-новостей нет</string>
+    <string name="ivNearDateContentDesc">A mark near date</string>
+    <string name="ivNewsPicContentDesc">A picture related to item</string>
+    <string name="errorText_noNews">Новости отсутствуют</string>
+    <string name="errorText_noConnection">Ошибка соединения, проверьте доступ к сети</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="ivNearDateContentDesc">A mark near date</string>
-    <string name="ivNewsPicContentDesc">A picture related to item</string>
+
 </resources>

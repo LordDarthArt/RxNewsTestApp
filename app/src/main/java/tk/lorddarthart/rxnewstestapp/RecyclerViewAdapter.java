@@ -66,7 +66,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvDate, tvTitle, tvDesc;
-        ImageView ivNewsPic;
+        ImageView ivNewsPic, ivNearDate;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -75,6 +75,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvDesc = itemView.findViewById(R.id.tvDesc);
             ivNewsPic = itemView.findViewById(R.id.ivNewsPic);
+            ivNearDate = itemView.findViewById(R.id.ivNearDate);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -111,6 +112,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 holder.ivNewsPic.setImageDrawable(context.getResources().getDrawable(R.drawable.no_image_available));
                 e.printStackTrace();
             }
+            holder.ivNearDate.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_m_1));
             return null;
         }
 

@@ -1,5 +1,6 @@
 package tk.lorddarthart.rxnewstestapp;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -42,7 +43,7 @@ public class MainFragment extends Fragment implements MainMainFragment.OnFragmen
         // This is another example of the adapter pattern.
         final ViewPager viewPager = view.findViewById(R.id.pager);
         final PagerAdapter adapter = new PagerAdapter
-                (getActivity().getSupportFragmentManager(), tabLayout.getTabCount());
+                (getChildFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
 
         // Setting a listener for clicks.
@@ -71,6 +72,11 @@ public class MainFragment extends Fragment implements MainMainFragment.OnFragmen
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
     }
 
     @Override
