@@ -4,37 +4,34 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import tk.lorddarthart.rxnewstestapp.util.JSONPlaceHolderApi
+import tk.lorddarthart.rxnewstestapp.util.constants.Constants.BASE_URL
+import tk.lorddarthart.rxnewstestapp.util.network.retrofit.GetNewsList
 
 internal class HttpServiceHelper private constructor() {
-    private val mRetrofit: Retrofit
+    private val retrofit: Retrofit
+    private val client: OkHttpClient
 
-    val jsonApi: JSONPlaceHolderApi
-        get() = mRetrofit.create(JSONPlaceHolderApi::class.java)
+    private val interceptor: HttpLoggingInterceptor = HttpLoggingInterceptor()
+
+    val jsonApi: GetNewsList
+        get() = retrofit.create(GetNewsList::class.java)
 
     init {
-        val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
 
-        val client = OkHttpClient.Builder()
-                .addInterceptor(interceptor)
+        client = OkHttpClient.Builder()
+                .addInterceptor(interceptor).build()
 
-        mRetrofit = Retrofit.Builder()
+        retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
                 .build()
     }
 
     companion object {
-        private var mInstance: HttpServiceHelper? = null
-        private val BASE_URL = "https://drive.google.com/"
+        private const val TAG = "HttpServiceHelper"
 
-        val instance: HttpServiceHelper
-            get() {
-                if (mInstance == null) {
-                    mInstance = HttpServiceHelper()
-                }
-                return mInstance!!
-            }
+        lateinit var instance: HttpServiceHelper
     }
 }

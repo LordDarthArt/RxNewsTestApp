@@ -1,32 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/darker_gray"
-    tools:context=".application.view.fragment.FullInfoFragment">
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbarFullInfo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:background="?attr/colorPrimary"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbarFullInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_scrollFlags="scroll|enterAlways|snap"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvItemFI"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="5dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -37,20 +36,6 @@
                 android:id="@+id/clItemMainFI"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/tvDateFI"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:text=""
-                    android:textColor="#8E8E93"
-                    android:textSize="12sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/ivNearDateFI"
-                    app:layout_constraintTop_toBottomOf="@+id/ivNewsPicFI" />
 
                 <TextView
                     android:id="@+id/tvDescFI"
@@ -72,20 +57,9 @@
                     android:layout_marginTop="8dp"
                     android:text=""
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="@+id/tvDateFI"
-                    app:layout_constraintStart_toStartOf="@+id/ivNearDateFI"
-                    app:layout_constraintTop_toBottomOf="@+id/tvDateFI" />
-
-                <ImageView
-                    android:id="@+id/ivNearDateFI"
-                    android:layout_width="9dp"
-                    android:layout_height="9dp"
-                    android:layout_marginStart="8dp"
-                    android:contentDescription="@string/ivNearDateContentDesc"
-                    app:layout_constraintBottom_toBottomOf="@+id/tvDateFI"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/tvDateFI"
-                    app:srcCompat="@drawable/ic_m_1" />
+                    app:layout_constraintEnd_toEndOf="@+id/consLayDate"
+                    app:layout_constraintStart_toStartOf="@+id/consLayDate"
+                    app:layout_constraintTop_toBottomOf="@+id/consLayDate" />
 
                 <ImageView
                     android:id="@+id/ivNewsPicFI"
@@ -96,10 +70,50 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/no_image_available" />
+                    app:srcCompat="@drawable/ic_no_image_available" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/consLayDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#AA000000"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivNewsPicFI"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <ImageView
+                        android:id="@+id/ivNearDateFI"
+                        android:layout_width="9dp"
+                        android:layout_height="9dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:contentDescription="@string/ivNearDateContentDesc"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_m_1" />
+
+                    <TextView
+                        android:id="@+id/tvDateFI"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text=""
+                        android:textColor="@android:color/white"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/ivNearDateFI"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
+    </androidx.core.widget.NestedScrollView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

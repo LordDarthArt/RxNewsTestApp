@@ -16,4 +16,7 @@ class Item {
     @SerializedName("pic")
     @Expose
     internal var pic: String? = null
+    @SerializedName("link")
+    @Expose
+    internal var link: String? = null
 }

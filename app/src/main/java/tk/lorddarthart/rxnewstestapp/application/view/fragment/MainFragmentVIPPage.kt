@@ -14,44 +14,39 @@ import tk.lorddarthart.rxnewstestapp.application.view.base.BaseFragment
 /**
  * A simple [Fragment] subclass.
  * Activities that contain this fragment must implement the
- * [MainVipFragment.OnFragmentInteractionListener] interface
+ * [MainFragmentVIPPage.OnFragmentInteractionListener] interface
  * to handle interaction events.
- * Use the [MainVipFragment.newInstance] factory method to
+ * Use the [MainFragmentVIPPage.newInstance] factory method to
  * create an instance of this fragment.
  */
-class MainVipFragment : BaseFragment() {
+class MainFragmentVIPPage : BaseFragment() {
+    private var param1: String? = null
+    private var param2: String? = null
 
-    // TODO: Rename and change types of parameters
-    private var mParam1: String? = null
-    private var mParam2: String? = null
-
-    private var mListener: OnFragmentInteractionListener? = null
+    private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (arguments != null) {
-            mParam1 = arguments!!.getString(ARG_PARAM1)
-            mParam2 = arguments!!.getString(ARG_PARAM2)
+        arguments?.let { arguments ->
+            param1 = arguments.getString(ARG_PARAM1)
+            param2 = arguments.getString(ARG_PARAM2)
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main_vip, container, false)
-    }
+        mainView = inflater.inflate(R.layout.fragment_main_page_vip, container, false)
 
-    // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
-        if (mListener != null) {
-            mListener!!.onFragmentInteraction(uri)
-        }
+        initViews()
+        setContent()
+
+        return mainView
     }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
-            mListener = context
+            listener = context
         } else {
             throw RuntimeException(context!!.toString() + " must implement OnFragmentInteractionListener")
         }
@@ -59,7 +54,7 @@ class MainVipFragment : BaseFragment() {
 
     override fun onDetach() {
         super.onDetach()
-        mListener = null
+        listener = null
     }
 
     /**
@@ -72,15 +67,12 @@ class MainVipFragment : BaseFragment() {
      * See the Android Training lesson [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html) for more information.
      */
     interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         fun onFragmentInteraction(uri: Uri)
     }
 
     companion object {
-        // TODO: Rename parameter arguments, choose names that match
-        // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-        private val ARG_PARAM1 = "param1"
-        private val ARG_PARAM2 = "param2"
+        private const val ARG_PARAM1 = "param1"
+        private const val ARG_PARAM2 = "param2"
 
         /**
          * Use this factory method to create a new instance of
@@ -88,11 +80,10 @@ class MainVipFragment : BaseFragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment MainVipFragment.
+         * @return A new instance of fragment MainFragmentVIPPage.
          */
-        // TODO: Rename and change types and number of parameters
-        fun newInstance(param1: String, param2: String): MainVipFragment {
-            val fragment = MainVipFragment()
+        fun newInstance(param1: String, param2: String): MainFragmentVIPPage {
+            val fragment = MainFragmentVIPPage()
             val args = Bundle()
             args.putString(ARG_PARAM1, param1)
             args.putString(ARG_PARAM2, param2)
@@ -100,4 +91,4 @@ class MainVipFragment : BaseFragment() {
             return fragment
         }
     }
-}// Required empty public constructor
+}

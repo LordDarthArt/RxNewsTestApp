@@ -1,27 +1,28 @@
 package tk.lorddarthart.rxnewstestapp.application.view.fragment
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.graphics.BitmapFactory
+import android.graphics.Bitmap
+import android.graphics.drawable.AnimatedImageDrawable
+import android.graphics.drawable.AnimationDrawable
 import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
-
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import io.reactivex.disposables.CompositeDisposable
+import retrofit2.Retrofit
 import tk.lorddarthart.rxnewstestapp.R
 import tk.lorddarthart.rxnewstestapp.application.view.base.BaseFragment
-
-import java.net.URL
-import java.util.Objects
+import tk.lorddarthart.rxnewstestapp.util.network.retrofit.RetrofitClient
 import java.util.concurrent.ExecutionException
-
 
 /**
  * A simple [Fragment] subclass.
@@ -29,96 +30,103 @@ import java.util.concurrent.ExecutionException
  * create an instance of this fragment.
  */
 class FullInfoFragment : BaseFragment() {
-    private var mParam1: String? = null
-    private var mParam2: String? = null
+    private var param1: String? = null
+    private var param2: String? = null
 
-    private var tvDateFI: TextView? = null
-    private var tvTitleFI: TextView? = null
-    private var tvDescFI: TextView? = null
-    internal lateinit var ivNewsPicFI: ImageView
-    internal lateinit var ivNearDateFI: ImageView
+    private lateinit var textViewDate: TextView
+    private lateinit var textViewTitle: TextView
+    private lateinit var textViewDescription: TextView
+    private lateinit var toolbar: Toolbar
+    private lateinit var imageViewNewsPic: ImageView
+    private lateinit var imageViewUnreadMark: ImageView
+    private lateinit var retrofit: Retrofit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (arguments != null) {
-            mParam1 = arguments!!.getString(ARG_PARAM1)
-            mParam2 = arguments!!.getString(ARG_PARAM2)
+        arguments?.let { arguments ->
+            param1 = arguments.getString(ARG_PARAM1)
+            param2 = arguments.getString(ARG_PARAM2)
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_full_info, container, false)
-        val toolbar = view.findViewById<Toolbar>(R.id.toolbarFullInfo)
-        (Objects.requireNonNull(activity) as AppCompatActivity).setSupportActionBar(toolbar)
-        (Objects.requireNonNull(activity) as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        mainView = inflater.inflate(R.layout.fragment_full_info, container, false)
 
-        return view
+        initViews()
+        setContent()
+
+        return mainView
     }
 
-    override fun onResume() {
-        super.onResume()
-        val bundle = arguments
+    override fun initViews() {
+        super.initViews()
+        with(mainView) {
+            toolbar = findViewById(R.id.toolbarFullInfo)
+            textViewDate = findViewById(R.id.tvDateFI)
+            textViewTitle = findViewById(R.id.tvTitleFI)
+            textViewDescription = findViewById(R.id.tvDescFI)
+            imageViewUnreadMark = findViewById(R.id.ivNearDateFI)
+            imageViewNewsPic = findViewById(R.id.ivNewsPicFI)
+        }
+    }
 
-        val view = view
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        mainActivity.onBackPressed()
+        return super.onOptionsItemSelected(item)
+    }
 
-        tvDateFI = view!!.findViewById(R.id.tvDateFI)
-        tvTitleFI = view.findViewById(R.id.tvTitleFI)
-        tvDescFI = view.findViewById(R.id.tvDescFI)
-        ivNearDateFI = view.findViewById(R.id.ivNearDateFI)
-        ivNewsPicFI = view.findViewById(R.id.ivNewsPicFI)
-
-        if (bundle != null) {
-            tvDateFI!!.text = bundle.getString("date")
-            tvTitleFI!!.text = bundle.getString("title")
-            tvDescFI!!.text = bundle.getString("desc")
+    override fun setContent() {
+        super.setContent()
+        toolbar.setNavigationOnClickListener {
+            mainActivity.onBackPressed()
+        }
+        mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        mainActivity.setSupportActionBar(toolbar)
+        arguments?.let { arguments ->
+            textViewDate.text = arguments.getString("date")
+            textViewTitle.text = arguments.getString("title")
+            textViewDescription.text = arguments.getString("desc")
             try {
-                bundle.getString("pic")?.let { UploadImageToItem(it).execute().get() }
+                retrofit = RetrofitClient.getInstance()
+                arguments.getString("pic")?.let {
+                    animatedImgLoad(it)
+                }
             } catch (e: ExecutionException) {
                 e.printStackTrace()
             } catch (e: InterruptedException) {
                 e.printStackTrace()
             }
-
         }
     }
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-    }
-
-    /**
-     * Загрузка предоставленного к новости изображения отдельно от основного потока
-     */
-    @SuppressLint("StaticFieldLeak")
-    inner class UploadImageToItem internal constructor(
-            private var urlString: String
-    ) : AsyncTask<Void, Void, Void>() {
-
-        override fun doInBackground(vararg voids: Void): Void? {
-            try {
-                val url = URL(urlString)
-                val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-                ivNewsPicFI.setImageBitmap(bmp)
-            } catch (e: Exception) {
-                ivNewsPicFI.setImageDrawable(activity!!.resources.getDrawable(R.drawable.no_image_available))
-                e.printStackTrace()
-            }
-
-            ivNearDateFI.setImageDrawable(activity!!.resources.getDrawable(R.drawable.ic_m_1))
-            return null
+    private fun animatedImgLoad(urlString: String) {
+        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.P) {
+            val animPlaceholderPiePlus = ContextCompat.getDrawable(
+                    mainActivity,
+                    R.drawable.ic_preload
+            ) as AnimatedImageDrawable
+            animPlaceholderPiePlus.start()
+            Glide.with(this).load(urlString)
+                    .placeholder(animPlaceholderPiePlus)
+                    .error(R.drawable.ic_no_image_available)
+                    .into(imageViewNewsPic)
+        } else {
+            val animPlaceholderOreoMinus = ContextCompat.getDrawable(
+                    mainActivity,
+                    R.drawable.ic_preload
+            ) as AnimationDrawable
+            animPlaceholderOreoMinus.start()
+            Glide.with(this).load(urlString)
+                    .placeholder(animPlaceholderOreoMinus)
+                    .error(R.drawable.ic_no_image_available)
+                    .into(imageViewNewsPic)
         }
     }
 
     companion object {
-        // TODO: Rename parameter arguments, choose names that match
-        // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-        private val ARG_PARAM1 = "param1"
-        private val ARG_PARAM2 = "param2"
+        private const val ARG_PARAM1 = "param1"
+        private const val ARG_PARAM2 = "param2"
 
         /**
          * Use this factory method to create a new instance of
@@ -128,7 +136,6 @@ class FullInfoFragment : BaseFragment() {
          * @param param2 Parameter 2.
          * @return A new instance of fragment FullInfoFragment.
          */
-        // TODO: Rename and change types and number of parameters
         fun newInstance(param1: String, param2: String): FullInfoFragment {
             val fragment = FullInfoFragment()
             val args = Bundle()

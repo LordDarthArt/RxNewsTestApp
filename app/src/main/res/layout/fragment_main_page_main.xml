@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".application.view.fragment.MainMainFragment">
+    tools:context=".application.view.fragment.MainFragmentMainPage">
 
     <com.baoyz.widget.PullRefreshLayout
         android:id="@+id/pull2refresh"

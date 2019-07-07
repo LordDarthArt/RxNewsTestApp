@@ -4,14 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import com.google.android.material.snackbar.Snackbar
 import tk.lorddarthart.rxnewstestapp.R
 import tk.lorddarthart.rxnewstestapp.application.view.base.BaseFragment
-
-import java.util.Objects
 
 
 /**
@@ -20,38 +18,50 @@ import java.util.Objects
  * create an instance of this fragment.
  */
 class NotificationsFragment : BaseFragment() {
+    private var param1: String? = null
+    private var param2: String? = null
 
-    // TODO: Rename and change types of parameters
-    private var mParam1: String? = null
-    private var mParam2: String? = null
+    private lateinit var toolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (arguments != null) {
-            mParam1 = arguments!!.getString(ARG_PARAM1)
-            mParam2 = arguments!!.getString(ARG_PARAM2)
+        arguments?.let {arguments ->
+            param1 = arguments.getString(ARG_PARAM1)
+            param2 = arguments.getString(ARG_PARAM2)
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        val view = inflater.inflate(R.layout.fragment_notifications, container, false)
-        val toolbar = view.findViewById<Toolbar>(R.id.toolbarNotifications)
-        try {
-            (Objects.requireNonNull(activity) as AppCompatActivity).setSupportActionBar(toolbar)
-        } catch (e: NullPointerException) {
-            Toast.makeText(activity, "What a pity", Toast.LENGTH_SHORT).show()
-        }
+        mainView = inflater.inflate(R.layout.fragment_notifications, container, false)
 
-        // Inflate the layout for this fragment
-        return view
+        initViews()
+        setContent()
+
+        return mainView
+    }
+
+    override fun initViews() {
+        super.initViews()
+        with(mainView) {
+            toolbar = findViewById(R.id.toolbarNotifications)
+        }
+    }
+
+    override fun setContent() {
+        super.setContent()
+        try {
+            (mainActivity as AppCompatActivity).setSupportActionBar(toolbar)
+        } catch (e: NullPointerException) {
+            e.message?.let {
+                Snackbar.make(this.mainView, it, Snackbar.LENGTH_SHORT).show()
+            }
+        }
     }
 
     companion object {
-        // TODO: Rename parameter arguments, choose names that match
-        // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-        private val ARG_PARAM1 = "param1"
-        private val ARG_PARAM2 = "param2"
+        private const val ARG_PARAM1 = "param1"
+        private const val ARG_PARAM2 = "param2"
 
         /**
          * Use this factory method to create a new instance of
@@ -61,7 +71,6 @@ class NotificationsFragment : BaseFragment() {
          * @param param2 Parameter 2.
          * @return A new instance of fragment NotificationsFragment.
          */
-        // TODO: Rename and change types and number of parameters
         fun newInstance(param1: String, param2: String): NotificationsFragment {
             val fragment = NotificationsFragment()
             val args = Bundle()
@@ -71,4 +80,4 @@ class NotificationsFragment : BaseFragment() {
             return fragment
         }
     }
-}// Required empty public constructor
+}

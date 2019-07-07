@@ -3,27 +3,40 @@ package tk.lorddarthart.rxnewstestapp.util.adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.graphics.drawable.AnimatedImageDrawable
+import android.graphics.drawable.AnimationDrawable
 import android.os.AsyncTask
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import tk.lorddarthart.rxnewstestapp.R
 import tk.lorddarthart.rxnewstestapp.application.model.Item
 import tk.lorddarthart.rxnewstestapp.util.OnItemTouchListener
 import java.net.URL
 import java.util.concurrent.ExecutionException
 
-internal class RecyclerViewAdapter internal constructor(private val context: Context, private val listItems: List<Item>, private val onItemTouchListener: OnItemTouchListener) : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
-    internal lateinit var view: View
-    private var viewHolder: ViewHolder? = null
+internal class RecyclerViewAdapter internal constructor(
+        private val context: Context,
+        private val listItems: List<Item>,
+        private val onItemTouchListener: OnItemTouchListener
+) : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
+    internal lateinit var mainView: View
+    private var mainViewHolder: ViewHolder? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        view = LayoutInflater.from(context).inflate(R.layout.singleitem_news, parent, false)
-        viewHolder = ViewHolder(view)
-        return viewHolder as ViewHolder
+        mainView = LayoutInflater.from(context).inflate(
+                R.layout.singleitem_news,
+                parent,
+                false
+        )
+        mainViewHolder = ViewHolder(mainView)
+        return mainViewHolder as ViewHolder
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -32,7 +45,7 @@ internal class RecyclerViewAdapter internal constructor(private val context: Con
         holder.tvTitle.text = item.title
         holder.tvDesc.text = item.desc
         try {
-            UploadImageToItem(item.pic!!, holder).execute().get()
+            animatedImgLoad(item.pic!!, holder)
         } catch (e: ExecutionException) {
             e.printStackTrace()
         } catch (e: InterruptedException) {
@@ -51,34 +64,33 @@ internal class RecyclerViewAdapter internal constructor(private val context: Con
         var tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
         var tvDesc: TextView = itemView.findViewById(R.id.tvDesc)
         var ivNewsPic: ImageView = itemView.findViewById(R.id.ivNewsPic)
-        var ivNearDate: ImageView = itemView.findViewById(R.id.ivNearDate)
 
         init {
             itemView.setOnClickListener { v -> onItemTouchListener.onCardViewTap(v, layoutPosition) }
         }
     }
 
-    /**
-     * Загрузка предоставленного к новости изображения отдельно от основного потока
-     */
-    @SuppressLint("StaticFieldLeak")
-    inner class UploadImageToItem internal constructor(
-            private var urlString: String,
-            private var holder: ViewHolder
-    ) : AsyncTask<Void, Void, Void>() {
-
-        override fun doInBackground(vararg voids: Void): Void? {
-            try {
-                val url = URL(urlString)
-                val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-                holder.ivNewsPic.setImageBitmap(bmp)
-            } catch (e: Exception) {
-                holder.ivNewsPic.setImageDrawable(context.resources.getDrawable(R.drawable.no_image_available))
-                e.printStackTrace()
-            }
-
-            holder.ivNearDate.setImageDrawable(context.resources.getDrawable(R.drawable.ic_m_1))
-            return null
+    private fun animatedImgLoad(urlString: String, holder: ViewHolder) {
+        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.P) {
+            val animPlaceholderPiePlus = ContextCompat.getDrawable(
+                    context,
+                    R.drawable.ic_preload
+            ) as AnimatedImageDrawable
+            animPlaceholderPiePlus.start()
+            Glide.with(context).load(urlString)
+                    .placeholder(animPlaceholderPiePlus)
+                    .error(R.drawable.ic_no_image_available)
+                    .into(holder.ivNewsPic)
+        } else {
+            val animPlaceholderOreoMinus = ContextCompat.getDrawable(
+                    context,
+                    R.drawable.ic_preload
+            ) as AnimationDrawable
+            animPlaceholderOreoMinus.start()
+            Glide.with(context).load(urlString)
+                    .placeholder(animPlaceholderOreoMinus)
+                    .error(R.drawable.ic_no_image_available)
+                    .into(holder.ivNewsPic)
         }
     }
 }

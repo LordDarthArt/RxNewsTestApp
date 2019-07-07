@@ -2,7 +2,6 @@ package tk.lorddarthart.rxnewstestapp.application.view.activity
 
 import android.net.Uri
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -10,7 +9,7 @@ import tk.lorddarthart.rxnewstestapp.R
 import tk.lorddarthart.rxnewstestapp.application.view.base.BaseActivity
 import tk.lorddarthart.rxnewstestapp.application.view.fragment.*
 
-class MainActivity : BaseActivity(), MainMainFragment.OnFragmentInteractionListener, MainVipFragment.OnFragmentInteractionListener {
+class MainActivity : BaseActivity(), MainFragmentMainPage.OnFragmentInteractionListener, MainFragmentVIPPage.OnFragmentInteractionListener {
 
     private val responseText: String? = null
 
