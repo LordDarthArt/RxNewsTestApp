@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_child_graph"
+    app:startDestination="@id/general_nav_host_main">
+    <fragment
+        android:id="@+id/general_nav_host_main"
+        android:name="tk.lorddarthart.rxnewstestapp.app.view.fragment.general.main.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" />
+    <fragment
+        android:id="@+id/navigation_account"
+        android:name="tk.lorddarthart.rxnewstestapp.app.view.fragment.general.account.AccountFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_account" />
+    <fragment
+        android:id="@+id/navigation_notifications"
+        android:name="tk.lorddarthart.rxnewstestapp.app.view.fragment.general.notifications.NotificationsFragment"
+        android:label="fragment_notifications"
+        tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/navigation_search"
+        android:name="tk.lorddarthart.rxnewstestapp.app.view.fragment.general.search.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
+</navigation>

@@ -13,7 +13,7 @@ internal class HttpServiceHelper private constructor() {
 
     private val interceptor: HttpLoggingInterceptor = HttpLoggingInterceptor()
 
-    val jsonApi: GetNewsList
+    val newsApi: GetNewsList
         get() = retrofit.create(GetNewsList::class.java)
 
     init {
@@ -25,12 +25,13 @@ internal class HttpServiceHelper private constructor() {
         retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapter.create())
                 .client(client)
                 .build()
     }
 
     companion object {
-        private const val TAG = "HttpServiceHelper"
+        private val TAG = HttpServiceHelper::class.java.simpleName
 
         lateinit var instance: HttpServiceHelper
     }

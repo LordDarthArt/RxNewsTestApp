@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loadingFragment">
+
+    <fragment
+        android:id="@+id/generalFragment"
+        android:name="tk.lorddarthart.rxnewstestapp.app.view.fragment.general.GeneralFragment"
+        android:label="fragment_general"
+        tools:layout="@layout/fragment_general" />
+    <fragment
+        android:id="@+id/loadingFragment"
+        android:name="tk.lorddarthart.rxnewstestapp.app.view.fragment.on_open.LoadingFragment"
+        android:label="fragment_loading"
+        tools:layout="@layout/fragment_loading" >
+        <action
+            android:id="@+id/action_loadingFragment_to_generalFragment"
+            app:destination="@id/generalFragment" />
+        <action
+            android:id="@+id/action_loadingFragment_to_authFragment"
+            app:destination="@id/authFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/authFragment"
+        android:name="tk.lorddarthart.rxnewstestapp.app.view.fragment.auth.AuthFragment"
+        android:label="fragment_auth"
+        tools:layout="@layout/fragment_auth" />
+</navigation>
