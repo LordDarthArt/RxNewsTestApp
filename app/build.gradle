@@ -71,7 +71,7 @@ dependencies {
     kapt "androidx.lifecycle:lifecycle-common-java8:$rootProject.androidx_architecture_components_version"
 
     // Data Binding Library
-    kapt "com.android.databinding:compiler:$rootProject.databinding_library_version"
+    kapt "androidx.databinding:databinding-compiler:$rootProject.gradle_version"
 
     // Kotlin support
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$rootProject.kotlin_version"

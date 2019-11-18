@@ -4,29 +4,37 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
 import tk.lorddarthart.rxnewstestapp.R
 import tk.lorddarthart.rxnewstestapp.app.view.base.BaseFragment
-import tk.lorddarthart.rxnewstestapp.databinding.FragmentErrorBindingImpl
+import tk.lorddarthart.rxnewstestapp.databinding.FragmentErrorBinding
 
 class ErrorFragment : BaseFragment() {
-    private lateinit var errorFragmentBinding: FragmentErrorBindingImpl
+    private lateinit var errorFragmentBinding: FragmentErrorBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        mainView = inflater.inflate(R.layout.fragment_error, container, false)
-        return mainView
+        errorFragmentBinding = FragmentErrorBinding.inflate(inflater, container, false)
+
+
+
+        return errorFragmentBinding.root
+    }
+
+    override fun hangObservers() {
+        // do nothing
+    }
+
+    override fun initListeners() {
+        // do nothing
     }
 
     override fun start() {
-        baseActivity.setSupportActionBar(toolbar)
+        baseActivity.setSupportActionBar(errorFragmentBinding.fragmentErrorToolbar)
         arguments?.let { arguments ->
             if (arguments.getString("werror") == "noconnection") {
-                textViewErrorDescription.text = resources.getString(R.string.errorText_noConnection)
+                errorFragmentBinding.fragmentErrorDescription.text = resources.getString(R.string.errorText_noConnection)
             } else if (arguments.getString("werror") == "nonews") {
-                textViewErrorDescription.text = resources.getString(R.string.errorText_noNews)
+                errorFragmentBinding.fragmentErrorDescription.text = resources.getString(R.string.errorText_noNews)
             }
         }
     }

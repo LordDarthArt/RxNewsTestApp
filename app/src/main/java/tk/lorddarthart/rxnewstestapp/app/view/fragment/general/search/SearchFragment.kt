@@ -4,73 +4,41 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.Toolbar
 import com.google.android.material.snackbar.Snackbar
-import tk.lorddarthart.rxnewstestapp.R
 import tk.lorddarthart.rxnewstestapp.app.view.base.BaseFragment
+import tk.lorddarthart.rxnewstestapp.databinding.FragmentSearchBinding
 
 
 /**
  * Fragment for searching elements
  */
 class SearchFragment : BaseFragment() {
-    private var mParam1: String? = null
-    private var mParam2: String? = null
-    private lateinit var toolbar: Toolbar
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let { arguments ->
-            mParam1 = arguments.getString(ARG_PARAM1)
-            mParam2 = arguments.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var searchFragmentBinding: FragmentSearchBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        mainView = inflater.inflate(R.layout.fragment_search, container, false)
+        searchFragmentBinding = FragmentSearchBinding.inflate(inflater, container, false)
 
-        initViews()
-        setContent()
+        initialization()
 
         return mainView
     }
 
-    override fun initViews() {
-        super.initViews()
-        toolbar = mainView.findViewById(R.id.toolbarSearch)
+    override fun hangObservers() {
+        // do something
     }
 
-    override fun setContent() {
-        super.setContent()
+    override fun initListeners() {
+        // do something
+    }
+
+    override fun start() {
         try {
-            baseActivity.setSupportActionBar(toolbar)
+            baseActivity.setSupportActionBar(searchFragmentBinding.toolbarSearch)
         } catch (e: NullPointerException) {
             e.message?.let {
                 Snackbar.make(mainView, it, Snackbar.LENGTH_LONG).show()
             }
-        }
-    }
-
-    companion object {
-        private const val ARG_PARAM1 = "param1"
-        private const val ARG_PARAM2 = "param2"
-
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SearchFragment.
-         */
-        fun newInstance(param1: String, param2: String): SearchFragment {
-            val fragment = SearchFragment()
-            val args = Bundle()
-            args.putString(ARG_PARAM1, param1)
-            args.putString(ARG_PARAM2, param2)
-            fragment.arguments = args
-            return fragment
         }
     }
 }

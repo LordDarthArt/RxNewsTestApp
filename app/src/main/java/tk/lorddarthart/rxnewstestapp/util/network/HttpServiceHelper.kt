@@ -3,6 +3,7 @@ package tk.lorddarthart.rxnewstestapp.util.network
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import tk.lorddarthart.rxnewstestapp.util.constants.Constants.BASE_URL
 import tk.lorddarthart.rxnewstestapp.util.network.retrofit.GetNewsList
@@ -25,7 +26,7 @@ internal class HttpServiceHelper private constructor() {
         retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapter.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(client)
                 .build()
     }

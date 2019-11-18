@@ -1,18 +1,16 @@
 package tk.lorddarthart.rxnewstestapp.app.view.activity
 
 import android.os.Bundle
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import tk.lorddarthart.rxnewstestapp.R
 import tk.lorddarthart.rxnewstestapp.app.view.base.BaseActivity
-import tk.lorddarthart.rxnewstestapp.app.view.base.interfaces.IBaseActivity
 import tk.lorddarthart.rxnewstestapp.app.viewmodel.activity.MainActivityViewModel
-import tk.lorddarthart.rxnewstestapp.databinding.ActivityMainBinding
 
 class MainActivity : BaseActivity() {
-    private lateinit var mainActivityBinding: ActivityMainBinding
+
+    lateinit var parentNavController: NavController
 
     private val mainActivityViewModel: MainActivityViewModel by lazy {
         ViewModelProvider(
@@ -22,7 +20,7 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mainActivityBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        setContentView(R.layout.activity_main)
 
         initialization()
     }
@@ -36,6 +34,6 @@ class MainActivity : BaseActivity() {
     }
 
     override fun start() {
-        // do something
+        parentNavController = findNavController(R.id.main_parent_fragment_container)
     }
 }

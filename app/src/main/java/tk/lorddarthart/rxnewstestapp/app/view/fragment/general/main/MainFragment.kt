@@ -4,69 +4,39 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.Toolbar
-import androidx.viewpager.widget.ViewPager
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.tabs.TabLayout
 import tk.lorddarthart.rxnewstestapp.R
-import tk.lorddarthart.rxnewstestapp.app.view.base.BaseFragment
 import tk.lorddarthart.rxnewstestapp.app.view.adapter.PagerAdapter
+import tk.lorddarthart.rxnewstestapp.app.view.base.BaseFragment
+import tk.lorddarthart.rxnewstestapp.app.viewmodel.fragment.general.main.MainFragmentViewModel
+import tk.lorddarthart.rxnewstestapp.databinding.FragmentMainBinding
 
 class MainFragment : BaseFragment() {
-    private lateinit var toolbar: Toolbar
-    private lateinit var tabLayout: TabLayout
-    private lateinit var viewPager: ViewPager
+    private lateinit var mainFragmentBinding: FragmentMainBinding
+
+    private val mainFragmentViewModel: MainFragmentViewModel by lazy {
+        ViewModelProvider(
+                this
+        )[MainFragmentViewModel::class.java]
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mainView = inflater.inflate(R.layout.fragment_main, container, false)
+        mainFragmentBinding = FragmentMainBinding.inflate(inflater, container, false)
 
-        initViews()
-        setContent()
+        initialization()
 
         return mainView
     }
 
-    override fun initViews() {
-        super.initViews()
-        with(mainView) {
-            toolbar = findViewById(R.id.fragment_full_info_toolbar)
-            tabLayout = findViewById(R.id.tab_layout)
-            viewPager = findViewById(R.id.pager)
-        }
+    override fun hangObservers() {
+
     }
 
-    override fun setContent() {
-        super.setContent()
-
-        baseActivity.setSupportActionBar(toolbar)
-
-        /**
-         * Create an instance of the tab layout from the mainView.
-         */
-        /**
-         * Set the text for each tab.
-         */
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_label1))
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_label2))
-        /**
-         * Set the tabs to fill the entire layout.
-         */
-        tabLayout.tabGravity = TabLayout.GRAVITY_FILL
-
-        /**
-         *  Using PagerAdapter to manage page views in fragments.
-         *  Each page is represented by its own fragment.
-         *  This is another example of the adapter pattern.
-         **/
-        val adapter = PagerAdapter(childFragmentManager, tabLayout.tabCount)
-        viewPager.adapter = adapter
-
-        /**
-         * Setting a listener for clicks.
-         */
-        viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
-        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+    override fun initListeners() {
+        mainFragmentBinding.fragmentMainTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                viewPager.currentItem = tab.position
+                mainFragmentBinding.fragmewntMainPager.currentItem = tab.position
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
@@ -79,10 +49,16 @@ class MainFragment : BaseFragment() {
         })
     }
 
-    companion object {
+    override fun start() {
+        baseActivity.setSupportActionBar(mainFragmentBinding.fragmentMainToolbar)
 
-        fun newInstance(): MainFragment {
-            return MainFragment()
+        with(mainFragmentBinding.fragmentMainTabLayout) {
+            addTab(newTab().setText(R.string.tab_label1))
+            addTab(newTab().setText(R.string.tab_label2))
+            tabGravity = TabLayout.GRAVITY_FILL
+            val adapter = PagerAdapter(childFragmentManager, tabCount)
+            mainFragmentBinding.fragmewntMainPager.adapter = adapter
+            mainFragmentBinding.fragmewntMainPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(this))
         }
     }
 }

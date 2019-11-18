@@ -10,7 +10,7 @@
         android:background="@android:color/background_light">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbarError"
+            android:id="@+id/fragment_error_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -23,7 +23,7 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/errorContainer"
+            android:id="@+id/fragment_error_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -33,10 +33,10 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbarError">
+            app:layout_constraintTop_toBottomOf="@+id/fragment_error_toolbar">
 
             <TextView
-                android:id="@+id/tvError"
+                android:id="@+id/fragment_error_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -48,10 +48,10 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivError" />
+                app:layout_constraintTop_toBottomOf="@+id/fragment_error_icon" />
 
             <ImageView
-                android:id="@+id/ivError"
+                android:id="@+id/fragment_error_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"

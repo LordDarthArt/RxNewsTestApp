@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import tk.lorddarthart.rxnewstestapp.app.view.base.BaseFragment
 import tk.lorddarthart.rxnewstestapp.app.viewmodel.fragment.on_open.LoadingFragmentViewModel
-import tk.lorddarthart.rxnewstestapp.R
+import tk.lorddarthart.rxnewstestapp.databinding.FragmentLoadingBinding
 
-
-class LoadingFragment : Fragment() {
+class LoadingFragment : BaseFragment() {
+    private lateinit var loadingFragmentBinding: FragmentLoadingBinding
 
     private val loadingFragmentViewModel: LoadingFragmentViewModel by lazy {
         ViewModelProvider(
@@ -20,7 +20,23 @@ class LoadingFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_loading, container, false)
+        loadingFragmentBinding = FragmentLoadingBinding.inflate(inflater, container, false)
+
+        initialization()
+
+        return loadingFragmentBinding.root
+    }
+
+    override fun hangObservers() {
+
+    }
+
+    override fun initListeners() {
+
+    }
+
+    override fun start() {
+
     }
 
 }
