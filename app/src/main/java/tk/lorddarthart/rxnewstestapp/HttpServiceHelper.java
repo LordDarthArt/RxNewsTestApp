@@ -7,18 +7,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 class HttpServiceHelper {
     private static HttpServiceHelper mInstance;
-    private static final String BASE_URL = "https://drive.google.com/";
+    private static final String BASE_URL = "http://10.0.2.2:8080";
     private Retrofit mRetrofit;
 
     private HttpServiceHelper() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        OkHttpClient.Builder client = new OkHttpClient.Builder()
-                .addInterceptor(interceptor);
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(interceptor).build();
 
         mRetrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
+                .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }

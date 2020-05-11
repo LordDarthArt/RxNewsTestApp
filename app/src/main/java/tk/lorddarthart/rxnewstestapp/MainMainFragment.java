@@ -91,7 +91,7 @@ public class MainMainFragment extends Fragment {
             public void onRefresh() {
                 HttpServiceHelper.getInstance()
                         .getJSONApi()
-                        .getPostWithID("1wozWr5swgtdV9PLyo2b09mtjaOD6sS2I")
+                        .getPostWithID()
                         .enqueue(new Callback<News>() {
                             @Override
                             public void onResponse(@NonNull Call<News> call, @NonNull Response<News> response) {
@@ -153,7 +153,7 @@ public class MainMainFragment extends Fragment {
 
         HttpServiceHelper.getInstance()
                 .getJSONApi()
-                .getPostWithID("1wozWr5swgtdV9PLyo2b09mtjaOD6sS2I")
+                .getPostWithID()
                 .enqueue(new Callback<News>() {
                     @Override
                     public void onResponse(@NonNull Call<News> call, @NonNull Response<News> response) {

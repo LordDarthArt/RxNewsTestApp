@@ -8,7 +8,7 @@ import org.json.JSONArray;
 import java.util.List;
 
 public class News {
-    @SerializedName("News")
+    @SerializedName("news")
     @Expose
     private List<Item> news;
 
